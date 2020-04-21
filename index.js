@@ -1,11 +1,11 @@
-//declare middleware
+//declare middlewares
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 
-//use middleware
+//use middlewares
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -14,7 +14,7 @@ const uri = process.env.DB_PATH;
 let client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
 
 // //get request
- app.get('/availableAppointment',(req, res)=>{
+ app.get('/availableAppointments',(req, res)=>{
  client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
 
     client.connect(err => {
