@@ -74,7 +74,45 @@ let client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: tr
 //         //client.close();
 //       });
 // });
+
+app.get('/appointments', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
+    client.connect(err => {
+        const collection = client.db("doctorsPortal").collection("appointments");
+        collection.find().sort({"date":-1}).toArray((err, documents) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({ message: err })
+            }
+            else {
+                res.send(documents);
+            }
+        })
+    });
+});
 // //post request
+//confirm Appointment
+app.post('/confirmAppointment', (req, res) => {
+    const appointmentDetail = req.body
+    appointmentDetail.postTime = new Date()
+    appointmentDetail.status = "pending";
+    appointmentDetail.prescription = null;
+    appointmentDetail.visited = "false";
+    client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
+    client.connect(err => {
+        const collection = client.db("doctorsPortal").collection("appointments");
+        collection.insertOne(appointmentDetail, (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({ message: err })
+            }
+            else {
+                res.send(result.ops[0]);
+            }
+        })
+    });
+})
+//addAvailableAppointment
 app.post('/addAvailableAppointment',(req,res)=>{
     //data save to database
     const product = req.body;
