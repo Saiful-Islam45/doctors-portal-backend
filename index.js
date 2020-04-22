@@ -75,7 +75,7 @@ let client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: tr
 //       });
 // });
 
-app.get('/appointments', (req, res) => {
+app.get('/allappointments', (req, res) => {
     client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("appointments");
@@ -107,6 +107,8 @@ app.post('/confirmAppointment', (req, res) => {
                 res.status(500).send({ message: err })
             }
             else {
+               // console.log("appointment");
+                
                 res.send(result.ops[0]);
             }
         })
