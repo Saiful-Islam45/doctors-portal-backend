@@ -14,6 +14,7 @@ const uri = process.env.DB_PATH;
 let client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
 
 // //get request
+//availableAppointments
  app.get('/availableAppointments',(req, res)=>{
  client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
 
@@ -31,51 +32,77 @@ let client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: tr
         //client.close();
       });
 })
-// //single product details by id
-// app.get('/products/:id',(req, res)=>{
-//     client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
-   
-//     const id = Number(req.params.id);
-    
-//     client.connect(err => {
-//         const collection = client.db("hotOnion").collection("allProducts");
-//         collection.find({id:id}).toArray((err,documents)=>{
-//             if (err) {
-//                 console.log(err);
-//                 res.status(500).send({message:err});
-//             }
-//             else{
-//             res.send(documents[0]); 
-//             }  
-//         });
-//         //client.close();
-//         });
-// })
-//    //oder placed
-//    app.post('/placeOrder',(req,res)=>{
-//     const orderInfo = req.body;
-//     console.log(" Before orderInfo",orderInfo);
+//doctors dashboard actions
+app.post('/updateStatus', (req, res) => {
+    const appointment = req.body;
+    client.connect(err => {
+        const collection = client.db("doctorsPortal").collection("appointments");
+        collection.updateOne(
+            { _id:ObjectId(appointment.id) }, 
+            {
+            $set: {  "status" : appointment.status },
+            $currentDate: { "lastModified": true }
+            },
+          (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({ message: err })
+            }
+            else {
+                res.send(result);
+                console.log(result);
+            }
+        })
+    });
+})
+app.post('/updateVisited', (req, res) => {
+    const visited = req.body;
+    client.connect(err => {
+        const collection = client.db("doctorsPortal").collection("appointments");
+        collection.updateOne(
+            { _id:ObjectId(visited.id) }, 
+            {
+            $set: {  "visited" : visited.visitStatus },
+            $currentDate: { "lastModified": true }
+            },
+          (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({ message: err })
+            }
+            else {
+                res.send(result);
+                console.log(result);
+            }
+        })
+    });
+})
+app.post('/updatePrescription', (req, res) => {
+    const appointment = req.body;
+    client.connect(err => {
+        const collection = client.db("doctorsPortal").collection("appointments");
+        collection.updateOne(
+            { _id:ObjectId(appointment.id) }, 
+            {
+            $set: {  "prescription" : appointment.prescription },
+            $currentDate: { "lastModified": true }
+            },
+          (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({ message: err })
+            }
+            else {
+                res.send(result);
+                console.log(result);
+            }
+        })
+    });
+})
 
-//     orderInfo.orderTime= new Date();
-//     console.log(" After orderInfo",orderInfo);
-//     client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
-    
-//     client.connect(error => {
-//         const collection = client.db("hotOnion").collection("orders");
-//         collection.insert(orderInfo ,(err,result)=>{
-//             if (err) {
-//                 console.log(err);
-//                 res.status(500).send({message:err});
-//             }
-//            else{
-//             res.send(result.ops[0]); 
-//            }  
-//         });
-//         //client.close();
-//       });
-// });
 
-app.get('/allappointments', (req, res) => {
+
+app.get('/appointments', (req, res) => {
     client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("appointments");
