@@ -235,7 +235,7 @@ app.post('/addPatient', (req, res) => {
     client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("patients");
-        collection.insertOne(patientDetails, (err, result) => {
+        collection.insert(patientDetails, (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(500).send({ message: err })
