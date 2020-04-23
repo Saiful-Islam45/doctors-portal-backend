@@ -51,6 +51,7 @@ app.get('/appointments', (req, res) => {
 //update appointment status
 
 app.post('/updateAppointment', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     const appointment = req.body;
     console.log(appointment);
     client.connect(err => {
@@ -75,6 +76,7 @@ app.post('/updateAppointment', (req, res) => {
 
 //show patients list
 app.get('/patients', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("patients");
         collection.find().toArray((err, documents) => {
@@ -91,6 +93,7 @@ app.get('/patients', (req, res) => {
 
 //count total patients
 app.get('/totalPatients', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("patients");
         collection.countDocuments((err,countData)=>{
@@ -109,6 +112,7 @@ app.get('/totalPatients', (req, res) => {
 // //post request
 //update patients status
 app.post('/updateStatus', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     const appointment = req.body;
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("appointments");
@@ -132,6 +136,7 @@ app.post('/updateStatus', (req, res) => {
 })
 //update visited
 app.post('/updateVisited', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     const visited = req.body;
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("appointments");
@@ -155,6 +160,7 @@ app.post('/updateVisited', (req, res) => {
 })
 //update Prescription status
 app.post('/updatePrescription', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     const appointment = req.body;
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("appointments");
@@ -178,6 +184,7 @@ app.post('/updatePrescription', (req, res) => {
 })
 //confirm Appointment
 app.post('/confirmAppointment', (req, res) => {
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     const appointmentDetail = req.body
     appointmentDetail.postTime = new Date()
     appointmentDetail.status = "pending";
@@ -223,8 +230,9 @@ app.post('/addAvailableAppointment',(req,res)=>{
 
 //Add new patient
 app.post('/addPatient', (req, res) => {
-    const patientDetails = req.body
-    patientDetails.postTime = new Date()
+    const patientDetails = req.body;
+    patientDetails.postTime = new Date();
+    client = new MongoClient(uri, { useNewUrlParser: true,useUnifiedTopology: true });
     client.connect(err => {
         const collection = client.db("doctorsPortal").collection("patients");
         collection.insertOne(patientDetails, (err, result) => {
