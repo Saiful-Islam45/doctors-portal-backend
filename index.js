@@ -55,7 +55,7 @@ app.post('/updateAppointment', (req, res) => {
     const appointment = req.body;
     console.log(appointment);
     client.connect(err => {
-        const collection = client.db("doctors-portal").collection("appointments");
+        const collection = client.db("doctorsPortal").collection("appointments");
         collection.updateOne(
             { _id:ObjectId(appointment.id) }, 
             {
